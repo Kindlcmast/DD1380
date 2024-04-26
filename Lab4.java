@@ -38,6 +38,10 @@ public class Lab4 {
             chars.add(i, character);
         }
     }
+      /*
+    funktion för utskrift, tar Set och utskriftklassen 
+    returnerar inget, kriver ut elementetn ur set
+    */
     public static void printFromSet(Set<String> elements, Kattio io){
         for (String element : elements) {
             io.println(element);
