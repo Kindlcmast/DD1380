@@ -4,18 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Lab4 {
+    /*
+    I den här uppgiten ska du läsa in en sträng S, 
+    och skriva ut en radbruten lista med alla unika permutationer som kan göras av strängen, 
+    i alfabetisk ordning. Med unika avses att din lista inte ska innehålla några dubletter.
 
+    Exempel: S = "ABA". De unika möjliga permutationerna är "AAB", "ABA" och "BAA".
+    */
     public static void main(String[] args) {
         Kattio io = new Kattio(System.in, System.out);
         String S = io.getWord();
-        
+/**
+ * splittar upp S, strägnen,  i en litsta [S,T,R,Ä,N,...] 
+ */
         List<Character> charList = new ArrayList<>();
         for (char c : S.toCharArray()) {
-            charList.add(c);
-        }
+            charList.add(c);}
         
-        Set<String> permutations = new TreeSet<>(); // A set to store unique permutations
-        generateAllPermutations(charList ,"", permutations);
+        Set<String> permutations = new TreeSet<>(); // set, endast unika premutationer, tree sparar i rätt ordning med liten tidskomplexitet
+
+        generateAllPermutations(charList ,"", permutations); 
         printFromSet(permutations, io);
         io.close();
     }
