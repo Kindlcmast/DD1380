@@ -21,10 +21,10 @@ public class Lab4 {
         for (char c : S.toCharArray()) {
             charList.add(c);}
         
-        Set<String> permutations = new TreeSet<>(); // set, endast unika premutationer, tree sparar i rätt ordning med liten tidskomplexitet
+        Set<String> mutations = new TreeSet<>(); // set, endast unika premutationer, tree sparar i rätt ordning med liten tidskomplexitet
 
-        generateAllPermutations(charList ,"", permutations); 
-        printFromSet(permutations, io);
+        generateAllmutations(charList ,"", mutations); 
+        printFromSet(mutations, io);
         io.close();
     }
 
@@ -33,17 +33,19 @@ public class Lab4 {
      * rekurivt bygger den upp alla sammansättnignar av de tecken som finns i listan som finns
      * returnerar inget, lägger till de olika sammaställningarna i trädet
      */
-    public static void generateAllPermutations(List<Character> chars,  String permutation, Set<String> permutations) {
-        if (chars.isEmpty()) {
-            permutations.add(permutation);
+    public static void generateAllmutations(List<Character> chars,  String mutation, Set<String> mutations) {
+        if (chars.isEmpty()) {//avbryter den rekursiva loopen vid tom lista
+            permutations.add(mutation);
             return;
         }
         for (int i = 0; i < chars.size(); i++) {
             char character = chars.get(i); //plockar ut tecken på index i
             chars.remove(i); //Tar bort tecknet på index i
 
-            generateAllPermutations(new ArrayList<>(chars),  permutation + character, permutations);
-            chars.add(i, character);
+            generateAllmutations(new ArrayList<>(chars),  mutation + character, mutations);
+            chars.add(i, character); //Återställer listan till OG
+
+            
         }
     }
       /*
