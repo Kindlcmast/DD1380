@@ -1,5 +1,4 @@
 import java.util.HashSet;
-import java.util.Scanner;
 import java.util.Set;
 
 public class Lab5 {
@@ -9,17 +8,16 @@ public class Lab5 {
     static Set<Character> validChars = new HashSet<>();
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        M = scanner.nextInt();
-        N = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
+        Kattio io = new Kattio(System.in, System.out);
+        M = io.getInt();
+        N = io.getInt();
 
         map = new char[M][N];
         visited = new boolean[M][N];
 
         // Läs in kartan
         for (int i = 0; i < M; i++) {
-            String row = scanner.nextLine();
+            String row = io.nextLine();
             for (int j = 0; j < N; j++) {
                 map[i][j] = row.charAt(j);
             }
@@ -36,7 +34,7 @@ public class Lab5 {
         } else {
             validChars.stream().sorted().forEach(System.out::print);
         }
-        scanner.close();
+        io.close();
     }
 
     static void dfs(int r, int c) {
