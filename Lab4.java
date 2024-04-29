@@ -35,7 +35,7 @@ public class Lab4 {
      */
     public static void generateAllmutations(List<Character> chars,  String mutation, Set<String> mutations) {
         if (chars.isEmpty()) {//avbryter den rekursiva loopen vid tom lista
-            permutations.add(mutation);
+            mutations.add(mutation);
             return;
         }
         for (int i = 0; i < chars.size(); i++) {
