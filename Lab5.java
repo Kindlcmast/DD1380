@@ -65,8 +65,7 @@ public class Lab5 {
         int row = rowCollum[0]; //Rad 
         int collum = rowCollum[1]; //collum 
         //Många krav, men i princip bara en koll om man är utanför marisens gränser eller om det är ett besökt element alternativt ett tecken som har väg redan
-        
-
+    
         visited.set(row * collumsInMatrix + collum); //För att inte besöka igen, row * collumsInMatrix + collum ger varje cell i matrisen ett unikt index i BitSeten.
         /*
          * 
@@ -82,10 +81,9 @@ public class Lab5 {
        
         if (row == bottomEndOfMatrix) {//Hittat en väg!
             charsToPrint.add((currentChar));
-            stk.clear(); 
             break;//Går vidare och få en ny start
         }
-        // Lägger till alla angränsande celler i stacken, först in sist ut, läser matrisen från vänster till höger, och ska neråt, därav dessa i slutet, så de utforskas först
+        // Lägger till alla angränsande celler i stacken som är giltiga, först in sist ut, läser matrisen från vänster till höger, och ska neråt, därav dessa i slutet, så de utforskas först
         if (row > leftAndTopEndOfMartix && !visited.get((row - 1) * collumsInMatrix + collum) && matrix[row - 1][collum] == currentChar ){stk.push(new int[] {row - 1, collum});} // upp
         if (collum > leftAndTopEndOfMartix && !visited.get(row * collumsInMatrix + (collum - 1))&& matrix[row ][collum-1] == currentChar ) {stk.push(new int[] {row, collum - 1});} // vänster
         if (collum < collumsInMatrix - 1 && !visited.get(row * collumsInMatrix + (collum + 1))&& matrix[row][collum+1] == currentChar ) {stk.push(new int[] {row, collum + 1});} // höger
