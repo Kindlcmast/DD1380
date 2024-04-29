@@ -1,98 +1,81 @@
 
 
-/*
- * 
- * I den här uppgiften ska du skriva ett program som kan läsa in en karta, och sedan hitta stigar som förbinder två sidor av den. Kartan består av en matris med M rader och N kolumner, innehållandes bokstäverna A-Z. Programmet ska skriva ut alla bokstäver (i bokstavsordning) som förbinder kartans översta och understa rad med varandra via en eller flera stigar. Två rutor i kartan anses tillhöra samma stig om de ligger antingen direkt ovanför/under, eller bredvid varandra. Inga diagonaler räknas alltså.
-
-Om det inte existerar några stigar alls, ska programmet skriva ut "0" (en nolla).
-
-Notera att stigar kan förgrena sig, alternativt att det kan finnas flera giltiga stigar med samma bokstav, men svaret ska bara innehålla samma bokstav högst en gång, oavsett hur många giltiga stigar som finns med den bokstaven.
-
-Indata
-I indata anges först två heltal, som anger antalet rader (M), resp kolumner (N), i den ordningen. På raden därefter följer själva kartan, som M rader med N tecken i varje rad.
-
-Du kan anta att N och M är heltal, och minst 1 och högst 10 000, samt att kartan består av versaler.
-
-Utdata
-Enn sträng av bokstäver i alfabetisk ordning, eller siffran 0.
- */
 import java.util.TreeSet;
 import java.util.Set;
 
 public class Lab5 {
-
-    
-    static char[][] map;
-    static boolean[][] visited;
-    static Set<Character> validChars = new TreeSet<>();
-    static int rowsInMatrix;
-    static int collumsInMatrix;
     static int leftAndTopEndOfMartix=0;
     static int rightEndOfMartix;
     static int bottomEndOfMatrix;
+    static Kattio io = new Kattio(System.in, System.out);
+    static char[][] matrix; //Hela matrisen
+    static boolean[][] visited; //vilka element som blivit besökta
+    static Set<Character> charsToPrint = new TreeSet<>(); //Litet innhåll, bara alfabetet, tidkomplexiteten är Log n men praktiskt taget samma som hashset O(1), pluss slipper sortera. 
+    static int rowsInMatrix;
+    static int collumsInMatrix;
+    static char currentChar;
     public static void main(String[] args) {
-        Kattio io = new Kattio(System.in, System.out);
+        
         rowsInMatrix = io.getInt();
         collumsInMatrix = io.getInt();
-        rightEndOfMartix= collumsInMatrix - 1;
+        rightEndOfMartix= collumsInMatrix - 1; //för att inte gå utanför 
         bottomEndOfMatrix= rowsInMatrix - 1;
-        map = new char[rowsInMatrix][collumsInMatrix];
+        matrix = new char[rowsInMatrix][collumsInMatrix];
         visited = new boolean[rowsInMatrix][collumsInMatrix];
-        ReadMap(rowsInMatrix, collumsInMatrix, io);
-        // Utför sökning från varje position i den första raden
-        // om det är ett segmet som är samma bokstäver ska det segmetet endast besökas en gång
-        // 
-        for (int currentCollum = 0; currentCollum < collumsInMatrix; currentCollum++) {
-            dfs(0, currentCollum);
+        MakeMarix(rowsInMatrix, collumsInMatrix);
+        // Utför sökning från varje position i den första raden, förutsatt att tecknet inte redan har en väg bekräftad
+        for (int currentColumn = 0; currentColumn < collumsInMatrix; currentColumn++) {
+                depthFirst(0, currentColumn,matrix[leftAndTopEndOfMartix][currentColumn] );
         }
-
-        // Skriv ut bokstäverna i alfabetisk ordning
-        printFromSet(validChars, io);
+        printFromSet(charsToPrint);
         io.close();
     }
 
     /*
      * Tar in måtten på matrisen och klassen för att läsa in matrisen 
-     * p
      */
-    public static void ReadMap(int M, int N, Kattio io){        
-        for (int i = 0; i < M; i++) {
+    public static void MakeMarix(int rowsInMatrix, int collumsInMatrix){        
+        for (int i = 0; i < rowsInMatrix; i++) {
             String row = io.getWord();
-            for (int j = 0; j < N; j++) {
-                map[i][j] = row.charAt(j);
+            for (int j = 0; j < collumsInMatrix; j++) {
+                matrix[i][j] = row.charAt(j);
             }}}
 
 
+            /*
+             * Djupet först sökning
+             * Tar in en kosrinar och vilket tecken vi söker en bana för 
+             * söker rekursivt fram en väg till botten
+             * om det redan finns en väg kommer ingen sökning att påbörjas
+             */
+    static void depthFirst(int row, int collum, char currentChar) {
 
-    static void dfs(int r, int c) {
-        //om vi har nått utanför matrisen alt redan besökt platsen returnerar vi
-        if (r < leftAndTopEndOfMartix || c < leftAndTopEndOfMartix || r >= rowsInMatrix || c >= collumsInMatrix || visited[r][c]) return; 
-        
-        visited[r][c] = true; //vi har besökt denna plats nu
+        if (row < leftAndTopEndOfMartix || collum < leftAndTopEndOfMartix || row >= rowsInMatrix || collum >= collumsInMatrix || visited[row][collum] || charsToPrint.contains(matrix[row][collum]) || 
+        matrix[row][collum] != currentChar) //Många krav, men i princip bara en koll om man är utanför marisens gränser eller om det är ett besökt element alternativt ett tecken som har väg redan
+            return; 
+    
+        visited[row][collum] = true;
 
-        if (r == bottomEndOfMatrix) { // Om vi når den sista raden har vi en väg
-            validChars.add(map[r][c]);
+    
+        if (row == bottomEndOfMatrix) { //Hittat en väg!
+            charsToPrint.add(currentChar);
+            return;
         }
-
-        char currentChar = map[r][c];
-        //Går upp om vi inte är längst upp och om tecknet oven är en del av den akturella stigen
-        if (r > 0 && map[r-1][c] == currentChar) {
-            dfs(r-1, c);} 
-        //Går ner om vi inte är vid botten än och om tecknet oven är en del av den akturella stigen
-        if (r < bottomEndOfMatrix && map[r+1][c] == currentChar){ 
-            dfs(r+1, c);}
-        //Går vänster om vi inte är vid vänsterkanten än och om tecknet oven är en del av den akturella stigen
-        if (c > 0 && map[r][c-1] == currentChar) {
-            dfs(r, c-1);}
-        //Går höger 
-        if (c < rightEndOfMartix && map[r][c+1] == currentChar) {
-            dfs(r, c+1);}
-
+        depthFirst(row, collum+1, currentChar);  // höger
+        depthFirst(row+1, collum, currentChar);  // ner
+        depthFirst(row, collum-1, currentChar);  // vänster
+        depthFirst(row-1, collum, currentChar);  // Upp
     }
 
-    public static void printFromSet(Set<Character> elements, Kattio io){
+
+    /*i princip årtervunnen från tidigasre labb
+     * skriver ut alla element i trädet
+     * om det inte finns några element skrivs en nolla ut
+     */
+    public static void printFromSet(Set<Character> elements){
         if (!elements.isEmpty()){
         for (Character element : elements) {
             io.println(element);
         } return;}
-    else {io.println('0');}}}
+    else {io.println('0');
+}}}
