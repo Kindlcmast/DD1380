@@ -25,6 +25,8 @@ public class Lab5 {
         matrix = new byte[rowsInMatrix][collumsInMatrix];
         visited = new BitSet(rowsInMatrix * collumsInMatrix);
         MakeMatrix(rowsInMatrix, collumsInMatrix);
+        io.flush();
+
         // Utför sökning från varje position i den första raden, förutsatt att tecknet inte redan har en väg bekräftad
         for (int currentColumn = 0; currentColumn < collumsInMatrix; currentColumn++) {
                 if (!charsToPrint.contains(matrix[0][currentColumn])){
@@ -62,35 +64,33 @@ public class Lab5 {
         int[] rowCollum = stk.pop(); //Dettta är positionen som ska utforskas
         int row = rowCollum[0]; //Rad 
         int collum = rowCollum[1]; //collum 
-
         //Många krav, men i princip bara en koll om man är utanför marisens gränser eller om det är ett besökt element alternativt ett tecken som har väg redan
-        if (row < 0 || row >= rowsInMatrix || collum < 0 || collum >= collumsInMatrix || 
-            visited.get(row * collumsInMatrix + collum) || matrix[row][collum] != currentChar || charsToPrint.contains(matrix[row][collum])) {
-                        continue;
-        }
+        
 
-        visited.set(row * collumsInMatrix + collum); //För att inte besöka igen, row * collumsInMatrix + collum gör om matrisen till en indexerad lista
+        visited.set(row * collumsInMatrix + collum); //För att inte besöka igen, row * collumsInMatrix + collum ger varje cell i matrisen ett unikt index i BitSeten.
         /*
          * 
-         *   1 2 3 4 5
-         * 0 0 1 2 3 4
-         * 1 1 2 3 4 5
-         * 2 2 6 .....
-         * 3 3.....
-         * 4 4......
+         *  0  1  2  3  4
+        * 0 0  1  2  3  4   första raden, 0*5+0, 0*5+1......
+        * 1 5  6  7  8  9   andra raden, 1*5+0, 1*5+1, ....... 1*5+4
+        * 2 10 .....  
+        * 3 ........
+        * 4 ..........
          * 
          * 
          */
        
         if (row == bottomEndOfMatrix) {//Hittat en väg!
             charsToPrint.add((currentChar));
-            continue;
+            stk.clear(); 
+            break;//Går vidare och få en ny start
         }
         // Lägger till alla angränsande celler i stacken, först in sist ut, läser matrisen från vänster till höger, och ska neråt, därav dessa i slutet, så de utforskas först
-        stk.push(new int[] {row - 1, collum}); // upp
-        stk.push(new int[] {row, collum - 1}); // vänster
-        stk.push(new int[] {row + 1, collum}); // ner
-        stk.push(new int[] {row, collum + 1}); // höger
+        if (row > leftAndTopEndOfMartix && !visited.get((row - 1) * collumsInMatrix + collum) && matrix[row - 1][collum] == currentChar ){stk.push(new int[] {row - 1, collum});} // upp
+        if (collum > leftAndTopEndOfMartix && !visited.get(row * collumsInMatrix + (collum - 1))&& matrix[row ][collum-1] == currentChar ) {stk.push(new int[] {row, collum - 1});} // vänster
+        if (collum < collumsInMatrix - 1 && !visited.get(row * collumsInMatrix + (collum + 1))&& matrix[row][collum+1] == currentChar ) {stk.push(new int[] {row, collum + 1});} // höger
+        if (row < rowsInMatrix - 1 && !visited.get((row + 1) * collumsInMatrix + collum) && matrix[row + 1][collum] == currentChar ) {stk.push(new int[] {row + 1, collum});} // ner
+        
     }
 }
     /*i princip årtervunnen från tidigasre labb
