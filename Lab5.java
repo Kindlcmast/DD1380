@@ -75,7 +75,7 @@ public class Lab5 {
     public static void printFromSet(Set<Character> elements){
         if (!elements.isEmpty()){
         for (Character element : elements) {
-            io.println(element);
+            io.print(element);
         } return;}
     else {io.println('0');
 }}}
