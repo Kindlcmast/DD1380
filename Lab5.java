@@ -2,6 +2,7 @@
 
 import java.util.TreeSet;
 import java.util.Set;
+import java.util.Stack;
 import java.util.BitSet;
 
 public class Lab5 {
@@ -26,8 +27,9 @@ public class Lab5 {
         MakeMatrix(rowsInMatrix, collumsInMatrix);
         // Utför sökning från varje position i den första raden, förutsatt att tecknet inte redan har en väg bekräftad
         for (int currentColumn = 0; currentColumn < collumsInMatrix; currentColumn++) {
+                if (!charsToPrint.contains((char) matrix[0][currentColumn])){
                 depthFirst(0, currentColumn,matrix[leftAndTopEndOfMartix][currentColumn] );
-        }
+        }}
         printFromSet(charsToPrint);
         io.close();
     }
@@ -47,29 +49,40 @@ public class Lab5 {
 
             /*
              * Djupet först sökning
-             * Tar in en kosrinar och vilket tecken vi söker en bana för 
-             * söker rekursivt fram en väg till botten
-             * om det redan finns en väg kommer ingen sökning att påbörjas
+             *
              */
-    static void depthFirst(int row, int collum, byte currentChar) {
-
-        if (row < leftAndTopEndOfMartix || collum < leftAndTopEndOfMartix || row >= rowsInMatrix || collum >= collumsInMatrix || visited.get(row * collumsInMatrix + collum) || charsToPrint.contains((char) matrix[row][collum]) || 
-        matrix[row][collum] != currentChar) //Många krav, men i princip bara en koll om man är utanför marisens gränser eller om det är ett besökt element alternativt ett tecken som har väg redan
-            return; 
+    static void depthFirst(int initialRow, int initialCollum, byte currentChar) {
     
-            visited.set(row * collumsInMatrix + collum, true);
+    Stack<int[]> stack = new Stack<>(); //Skapar en stack, körde tidigare med rekursiv sökning men detta ska flytta belastningen från anropsstacken till heapen vilket kanske löser memory problemet.
+    //börjar med att lägga startpositionen i stacken, längst ner i loopen kommer allla potentiella vägar läggas till
+    stack.push(new int[] {initialRow, initialCollum});
 
-    
-        if (row == bottomEndOfMatrix) { //Hittat en väg!
+    while (!stack.isEmpty()) {
+        // Tar bort och  toppen av stacken, utforskar denna.
+        int[] rowCollum = stack.pop();
+        int row = rowCollum[0];
+        int collum = rowCollum[1];
 
-            charsToPrint.add((char) currentChar);
-            return;
+        
+        if (row < 0 || row >= rowsInMatrix || collum < 0 || collum >= collumsInMatrix || 
+            visited.get(row * collumsInMatrix + collum) || matrix[row][collum] != currentChar) {//Många krav, men i princip bara en koll om man är utanför marisens gränser eller om det är ett besökt element alternativt ett tecken som har väg redan
+            continue;
         }
-        depthFirst(row, collum+1, currentChar);  // höger
-        depthFirst(row+1, collum, currentChar);  // ner
-        depthFirst(row, collum-1, currentChar);  // vänster
-        depthFirst(row-1, collum, currentChar);  // Upp
+
+        visited.set(row * collumsInMatrix + collum);
+
+       
+        if (row == bottomEndOfMatrix) {//Hittat en väg!
+            charsToPrint.add((char) (currentChar));
+            continue;
+        }
+        // Lägger till alla angränsande celler i stacken 
+        stack.push(new int[] {row, collum + 1}); // höger
+        stack.push(new int[] {row + 1, collum}); // ner
+        stack.push(new int[] {row, collum - 1}); // vänster
+        stack.push(new int[] {row - 1, collum}); // upp
     }
+}
     /*i princip årtervunnen från tidigasre labb
      * skriver ut alla element i trädet
      * om det inte finns några element skrivs en nolla ut
