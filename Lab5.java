@@ -3,14 +3,12 @@
 import java.util.TreeSet;
 import java.util.Set;
 import java.util.Stack;
-import java.util.BitSet;
 
 public class Lab5 {
     static int leftAndTopEndOfMartix=0;
     static int rightEndOfMartix;
     static int bottomEndOfMatrix;
     static Kattio io = new Kattio(System.in, System.out);
-    static BitSet visited; //vilka element som blivit besökta
     static Set<Byte> charsToPrint = new TreeSet<>(); //Litet innhåll, bara alfabetet, tidkomplexiteten är Log n men praktiskt taget samma som hashset O(1), pluss slipper sortera. 
     static int rowsInMatrix;
     static int collumsInMatrix;
@@ -23,7 +21,6 @@ public class Lab5 {
         rightEndOfMartix= collumsInMatrix - 1; //för att inte gå utanför 
         bottomEndOfMatrix= rowsInMatrix - 1;
         matrix = new byte[rowsInMatrix][collumsInMatrix];
-        visited = new BitSet(rowsInMatrix * collumsInMatrix);
         MakeMatrix(rowsInMatrix, collumsInMatrix);
         io.flush();
 
@@ -54,7 +51,7 @@ public class Lab5 {
              *
              */
     static void depthFirst(int initialRow, int initialCollum, byte currentChar) {
-    
+    if (currentChar == (byte) '1') return;
     Stack<int[]> stk = new Stack<>(); //Skapar en stack, körde tidigare med rekursiv sökning men detta ska flytta belastningen från anropsstacken till heapen vilket kanske löser memory problemet.
     //börjar med att lägga startpositionen i stacken, längst ner i loopen kommer allla potentiella vägar läggas till
     stk.push(new int[] {initialRow, initialCollum});
@@ -65,8 +62,10 @@ public class Lab5 {
         int row = rowCollum[0]; //Rad 
         int collum = rowCollum[1]; //collum 
         //Många krav, men i princip bara en koll om man är utanför marisens gränser eller om det är ett besökt element alternativt ett tecken som har väg redan
-    
-        visited.set(row * collumsInMatrix + collum); //För att inte besöka igen, row * collumsInMatrix + collum ger varje cell i matrisen ett unikt index i BitSeten.
+        if (currentChar == (byte) '1') continue;
+        matrix[row][collum]=(byte) '1';
+        io.println("Visiting: " + row + ", " + collum);
+        //visited.set(row * collumsInMatrix + collum); //För att inte besöka igen, row * collumsInMatrix + collum ger varje cell i matrisen ett unikt index i BitSeten.
         /*
          * 
          *  0  1  2  3  4
@@ -84,10 +83,10 @@ public class Lab5 {
             break;//Går vidare och få en ny start
         }
         // Lägger till alla angränsande celler i stacken som är giltiga, först in sist ut, läser matrisen från vänster till höger, och ska neråt, därav dessa i slutet, så de utforskas först
-        if (row > leftAndTopEndOfMartix && !visited.get((row - 1) * collumsInMatrix + collum) && matrix[row - 1][collum] == currentChar ){stk.push(new int[] {row - 1, collum});} // upp
-        if (collum > leftAndTopEndOfMartix && !visited.get(row * collumsInMatrix + (collum - 1))&& matrix[row ][collum-1] == currentChar ) {stk.push(new int[] {row, collum - 1});} // vänster
-        if (collum < collumsInMatrix - 1 && !visited.get(row * collumsInMatrix + (collum + 1))&& matrix[row][collum+1] == currentChar ) {stk.push(new int[] {row, collum + 1});} // höger
-        if (row < rowsInMatrix - 1 && !visited.get((row + 1) * collumsInMatrix + collum) && matrix[row + 1][collum] == currentChar ) {stk.push(new int[] {row + 1, collum});} // ner
+        if (row > leftAndTopEndOfMartix && matrix[row - 1][collum]== currentChar ){stk.push(new int[] {row - 1, collum});} // upp
+        if (collum > leftAndTopEndOfMartix && matrix[row ][collum-1] == currentChar ) {stk.push(new int[] {row, collum - 1});} // vänster
+        if (collum < collumsInMatrix - 1 && matrix[row][collum+1] == currentChar ) {stk.push(new int[] {row, collum + 1});} // höger
+        if (row < rowsInMatrix - 1  && matrix[row + 1][collum] == currentChar ) {stk.push(new int[] {row + 1, collum});} // ner
         
     }
 }
