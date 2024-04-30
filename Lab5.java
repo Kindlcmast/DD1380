@@ -1,9 +1,9 @@
 
 
 import java.util.TreeSet;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
-
 public class Lab5 {
     static int leftAndTopEndOfMartix=0;
     static int rightEndOfMartix;
@@ -14,6 +14,7 @@ public class Lab5 {
     static int collumsInMatrix;
     static char currentChar;
     static byte[][] matrix;
+    static Set<Byte> validchar= new HashSet<>();
     public static void main(String[] args) {
         
         rowsInMatrix = io.getInt();
@@ -23,10 +24,12 @@ public class Lab5 {
         matrix = new byte[rowsInMatrix][collumsInMatrix];
         MakeMatrix(rowsInMatrix, collumsInMatrix);
         io.flush();
-
+        for (int currentColumn=0;currentColumn < collumsInMatrix; currentColumn++){
+            validchar.add(matrix[bottomEndOfMatrix][currentColumn]);
+        }
         // Utför sökning från varje position i den första raden, förutsatt att tecknet inte redan har en väg bekräftad
         for (int currentColumn = 0; currentColumn < collumsInMatrix; currentColumn++) {
-                if (!charsToPrint.contains(matrix[0][currentColumn])){
+                if (!charsToPrint.contains(matrix[0][currentColumn]) && validchar.contains(matrix[0][currentColumn])){
                 depthFirst(0, currentColumn,matrix[leftAndTopEndOfMartix][currentColumn] );
         }}
         printFromSet(charsToPrint);
@@ -64,7 +67,7 @@ public class Lab5 {
         //Många krav, men i princip bara en koll om man är utanför marisens gränser eller om det är ett besökt element alternativt ett tecken som har väg redan
         if (currentChar == (byte) '1') continue;
         matrix[row][collum]=(byte) '1';
-        io.println("Visiting: " + row + ", " + collum);
+        
         //visited.set(row * collumsInMatrix + collum); //För att inte besöka igen, row * collumsInMatrix + collum ger varje cell i matrisen ett unikt index i BitSeten.
         /*
          * 
@@ -80,7 +83,7 @@ public class Lab5 {
        
         if (row == bottomEndOfMatrix) {//Hittat en väg!
             charsToPrint.add((currentChar));
-            break;//Går vidare och få en ny start
+            return;//Går vidare och få en ny start
         }
         // Lägger till alla angränsande celler i stacken som är giltiga, först in sist ut, läser matrisen från vänster till höger, och ska neråt, därav dessa i slutet, så de utforskas först
         if (row > leftAndTopEndOfMartix && matrix[row - 1][collum]== currentChar ){stk.push(new int[] {row - 1, collum});} // upp
