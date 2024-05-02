@@ -1,109 +1,107 @@
-import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.io.File;
 import java.util.*;
 
 public class Lab6 {
-    // Huvudmetoden som körs när programmet startar
     public static void main(String[] args) throws Exception {
-        // Använder en HashMap för att lagra unika poster
-        Map<String, Vegetable> recordsMap = new HashMap<>();
+        Map<String, Vegetable> records = new HashMap<>();
         
-        // Läser in filen med grönsaker med UTF-8-teckenkodning
-        BufferedReader reader = new BufferedReader(
-            new InputStreamReader(
-                new FileInputStream(new File("vegetables.txt")), "UTF-8"
-            )
-        );
+        Kattio io = new Kattio(new FileInputStream("vegetables.txt"), System.out);
+        int j=0;
+        while (io.hasMoreTokens() && j<=1000000) { //Max 1000000 rader i filen 
+           j++;
+                String type = io.getWord(); // Första ordet är vilken typ av grönask
 
-        String line;
-        // Läser filen rad för rad
-        while ((line = reader.readLine()) != null) {
-            // Delar upp raden i delar baserat på mellanslag
-            String[] parts = line.split("\\s+");
-            // Första delen är grönsakstyp
-            String type = parts[0];
-            // Sista delen är enheten (cm, hg etc.)
-            String unit = parts[parts.length - 1];
-            // Näst sista delen är storleken
-            int size = Integer.parseInt(parts[parts.length - 2]);
-            // Samlar ihop landets namn som kan vara uppdelat på flera delar
-            String country = String.join(" ", Arrays.copyOfRange(parts, 1, parts.length - 2));
+                ArrayList<String> parts = new ArrayList<>(); //Skapar en arraylist för att hantera resten av orden
+                
+                //Hittar nummer
+                String part = io.getWord();
+                int i=0;
+                while (true && i<100) { //Sätter en gräns för max antal itteratiner
+                    i++; 
+                    try {
+                        Integer.parseInt(part); //Testar on det är en siffra
+                        break; // on siffra, går vi vidare, då har vid urskillt enhet och land
+                    } catch (NumberFormatException err) {
+                        parts.add(part); // del av namn
+                        part = io.getWord(); // nästa ord
+                    }
+                }
 
-            // Skapar en nyckel för HashMap baserat på typ och land
-            String key = type + "_" + country;
-            // Skapar ett nytt Lab6-objekt
-            Vegetable record = new Vegetable(type, country, size, unit);
+                int size = Integer.parseInt(part);
+                String unit = io.getWord(); 
+                String country = String.join(" ", parts);
 
-            // Uppdaterar HashMap med den största storleken av grönsak som hittills hittats
-            recordsMap.merge(key, record, Vegetable::max);
+                String key = type + "-" + country;
+
+                Vegetable record = new Vegetable(type, country, size, unit);
+
+                records.merge(key, record, Vegetable::max); //Lägger in den största grönsaken per land, om redan finns, uppdaaterasden om den nya är större
+
         }
+        io.flush();
+        List<Vegetable> listToPrint = new ArrayList<>(records.values()); //Lägger alla grejer från hshmapen till en lista för sortering
+        Collections.sort(listToPrint); //sortering
 
-        // Stänger filinläsaren
-        reader.close();
-
-        // Konverterar map-värdena till en lista och sorterar den
-        List<Vegetable> recordsList = new ArrayList<>(recordsMap.values());
-        Collections.sort(recordsList);
-
-        // Skriver ut de sorterade posterna
-        for (Vegetable record : recordsList) {
-            System.out.println(record);
+        for (Vegetable record : listToPrint) { //skriver ut
+            io.println(record);
         }
-    }
-}
+        io.close();
+}}
 
-// Vegetable-klassen som representerar en poster av en grönsak
 class Vegetable implements Comparable<Vegetable> {
     private String type;
     private String country;
     private int size;
     private String unit;
 
-    // Konstruktor
+    /*
+     * initierar en gönsak
+     */
     public Vegetable(String type, String country, int size, String unit) {
         this.type = type;
         this.country = country;
         this.size = size;
         this.unit = unit;
     }
-
-    // Getters
-    public String getType() {
-        return type;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public String getUnit() {
-        return unit;
-    }
+/*
+ * Returnerar den grönsak som är störst
+ */
     public static Vegetable max(Vegetable a, Vegetable b) {
-        return a.size > b.size ? a : b;
-    }
-    // Implementerar compareTo för att sortera poster
-    public int compareTo(Vegetable other) {
-        int typeCompare = this.type.compareTo(other.type);
-        if (typeCompare != 0) {
-            return typeCompare;
+        if (a.size > b.size) {
+            return a;
         } else {
-            int sizeCompare = Integer.compare(other.size, this.size); // Storlek i fallande ordning
-            if (sizeCompare != 0) {
-                return sizeCompare;
-            } else {
-                return this.country.compareTo(other.country); // Land i stigande ordning
-            }
+            return b;
         }
     }
 
-    // toString-metod för utskrift
+/*
+ * Hur grönsaker ska sorteras
+ */
+    public int compareTo(Vegetable other) {
+        /*
+         * Negativt heltal: Det aktuella objektet (this) anses vara mindre än det andra objektet (other), vilket innebär att det bör komma före other i en sorterad sekvens.
+                Noll: Det aktuella objektet anses vara lika med det andra objektet, vilket innebär att det inte finns någon preferens för ordningen mellan de två vid sortering.
+                    Positivt heltal: Det aktuella objektet anses vara större än det andra objektet, vilket innebär att det bör komma efter other i en sorterad sekvens.
+         */
+
+    // avgör först på vilken typ av grönska
+    int typeCompare = this.type.compareTo(other.type);
+    if (typeCompare != 0) {
+        return typeCompare;
+    }
+
+    // om samma typ av grönsak, avgör på storlek
+    int sizeCompare = Integer.compare(other.size, this.size);
+    if (sizeCompare != 0) {
+        return sizeCompare;
+    }
+
+    // om allt annat är samma, jämför vi landets namn
+    return this.country.compareTo(other.country);
+}
+/*
+ * För utskrift
+ */
     public String toString() {
         return type + " " + country + " " + size + " " + unit;
     }
