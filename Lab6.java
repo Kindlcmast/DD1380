@@ -11,25 +11,25 @@ public class Lab6 {
            j++;
                 String type = io.getWord(); // Första ordet är vilken typ av grönask
 
-                ArrayList<String> parts = new ArrayList<>(); //Skapar en arraylist för att hantera resten av orden
+                ArrayList<String> words = new ArrayList<>(); //Skapar en arraylist för att hantera resten av orden
                 
                 //Hittar nummer
-                String part = io.getWord();
+                String wordOrInt = io.getWord();
                 int i=0;
                 while (true && i<100) { //Sätter en gräns för max antal itteratiner
                     i++; 
                     try {
-                        Integer.parseInt(part); //Testar on det är en siffra
+                        Integer.parseInt(wordOrInt); //Testar on det är en siffra
                         break; // on siffra, går vi vidare, då har vid urskillt enhet och land
                     } catch (NumberFormatException err) {
-                        parts.add(part); // del av namn
-                        part = io.getWord(); // nästa ord
+                        words.add(wordOrInt); // del av namn
+                        wordOrInt = io.getWord(); // nästa ord
                     }
                 }
 
-                int size = Integer.parseInt(part);
+                int size = Integer.parseInt(wordOrInt);
                 String unit = io.getWord(); 
-                String country = String.join(" ", parts);
+                String country = String.join(" ", words);
 
                 String key = type + "-" + country;
 
@@ -85,15 +85,15 @@ class Vegetable implements Comparable<Vegetable> {
          */
 
     // avgör först på vilken typ av grönska
-    int typeCompare = this.type.compareTo(other.type);
-    if (typeCompare != 0) {
-        return typeCompare;
+    int typeComp = this.type.compareTo(other.type);
+    if (typeComp != 0) {
+        return typeComp;
     }
 
     // om samma typ av grönsak, avgör på storlek
-    int sizeCompare = Integer.compare(other.size, this.size);
-    if (sizeCompare != 0) {
-        return sizeCompare;
+    int sizeComp = Integer.compare(other.size, this.size);
+    if (sizeComp != 0) {
+        return sizeComp;
     }
 
     // om allt annat är samma, jämför vi landets namn
