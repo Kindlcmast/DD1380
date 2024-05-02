@@ -1,11 +1,10 @@
-import java.io.FileInputStream;
 import java.util.*;
 
 public class Lab6 {
     public static void main(String[] args) throws Exception {
         Map<String, Vegetable> records = new HashMap<>();
         
-        Kattio io = new Kattio(new FileInputStream("vegetables.txt"), System.out);
+        Kattio io = new Kattio(System.in, System.out);
         int j=0;
         while (io.hasMoreTokens() && j<=1000000) { //Max 1000000 rader i filen 
            j++;
