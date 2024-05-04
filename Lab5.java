@@ -54,7 +54,7 @@ public class Lab5 {
              *
              */
     static void depthFirst(int initialRow, int initialCollum, byte currentChar) {
-    if (currentChar == (byte) '1') return;
+    //if (currentChar == (byte) '1') return;
     Stack<int[]> stk = new Stack<>(); //Skapar en stack, körde tidigare med rekursiv sökning men detta ska flytta belastningen från anropsstacken till heapen vilket kanske löser memory problemet.
     //börjar med att lägga startpositionen i stacken, längst ner i loopen kommer allla potentiella vägar läggas till
     stk.push(new int[] {initialRow, initialCollum});
@@ -64,22 +64,8 @@ public class Lab5 {
         int[] rowCollum = stk.pop(); //Dettta är positionen som ska utforskas
         int row = rowCollum[0]; //Rad 
         int collum = rowCollum[1]; //collum 
-        //Många krav, men i princip bara en koll om man är utanför marisens gränser eller om det är ett besökt element alternativt ett tecken som har väg redan
-        if (currentChar == (byte) '1') continue;
-        matrix[row][collum]=(byte) '1';
-        
-        //visited.set(row * collumsInMatrix + collum); //För att inte besöka igen, row * collumsInMatrix + collum ger varje cell i matrisen ett unikt index i BitSeten.
-        /*
-         * 
-         *  0  1  2  3  4
-        * 0 0  1  2  3  4   första raden, 0*5+0, 0*5+1......
-        * 1 5  6  7  8  9   andra raden, 1*5+0, 1*5+1, ....... 1*5+4
-        * 2 10 .....  
-        * 3 ........
-        * 4 ..........
-         * 
-         * 
-         */
+        if (currentChar == 1) continue;
+        matrix[row][collum]=1;
        
         if (row == bottomEndOfMatrix) {//Hittat en väg!
             charsToPrint.add((currentChar));

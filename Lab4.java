@@ -42,7 +42,39 @@ public class Lab4 {
             char character = chars.get(i); //plockar ut tecken på index i
             chars.remove(i); //Tar bort tecknet på index i
 
+           
+
             generateAllmutations(new ArrayList<>(chars),  mutation + character, mutations);
+             /*
+             *  om lista [A B A] kommer in
+             * kommer vi först ta:
+             * ""+A
+             * ""+B
+             * ""+A
+             * sen: 
+             * ""+A+B
+             * ""+A+A
+             * ""+B+A
+             * ""+B+A
+             * ""+A+A
+             * ""+A+B
+             * Sen
+             * ""+A+B+A
+             * ""+A+A+B
+             * ""+B+A+A
+             * ""+B+A+A
+             * ""+A+A+B
+             * ""+A+B+A
+             * vilket ger de unika:
+             * ABA
+             * AAB
+             * BAA
+             * men sorterade: 
+             *    ABA
+             *  /     \
+             * AAB    BAA
+             */
+
             chars.add(i, character); //Återställer listan till OG
 
             
