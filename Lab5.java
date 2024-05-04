@@ -37,7 +37,8 @@ public class Lab5 {
     }
 
     /*
-     * Tar in måtten på matrisen och klassen för att läsa in matrisen 
+     * Tar in måtten på matrisen 
+     * Fyller på matrisen
      */
     static void MakeMatrix(int rowsInMatrix, int columnsInMatrix) {
         for (int i = 0; i < rowsInMatrix; i++) {
