@@ -21,7 +21,7 @@ public class Lab1 {
     * return: hur lång den längsta delsträngen är, det högsta värdet i listan
     * 
     */
-      public static int findLongestLength(String string) {
+    public static int findLongestLength(String string) {
         if (string == null || string.isEmpty()) return 0; 
         char[] stringArr = string.toCharArray();
         int TempLength = 1;
