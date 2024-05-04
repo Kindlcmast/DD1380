@@ -24,8 +24,8 @@ public class Lab5 {
         matrix = new byte[rowsInMatrix][collumsInMatrix];
         MakeMatrix(rowsInMatrix, collumsInMatrix);
         io.flush();
-        for (int currentColumn=0;currentColumn < collumsInMatrix; currentColumn++){
-            validchar.add(matrix[bottomEndOfMatrix][currentColumn]);
+        for (int currentColumn=0;currentColumn < collumsInMatrix; currentColumn++){ //Ser till att hitta alla anslutningar i slutet
+            if (matrix[bottomEndOfMatrix][currentColumn]==matrix[bottomEndOfMatrix-1][currentColumn]) validchar.add(matrix[bottomEndOfMatrix][currentColumn]);
         }
         // Utför sökning från varje position i den första raden, förutsatt att tecknet inte redan har en väg bekräftad
         for (int currentColumn = 0; currentColumn < collumsInMatrix; currentColumn++) {
