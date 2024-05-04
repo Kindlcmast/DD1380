@@ -1,6 +1,4 @@
-import java.util.HashMap;
-import java.util.Map;
-
+import java.util.*;
 public class Lab2 {
     /*
      * Main funktion
@@ -39,25 +37,16 @@ public class Lab2 {
             dictionary.put(substring, number);//Uppdaterar  Hashmapen
         }
         
-        /*
-         * loopar över hela hashmapen för att kolla vilken sträng som hade mäst förekomst
-         */
-        String theSubsrtring=""; //För att få sista if att funka
-        int TempMaxNumber = 0; //Initerar med 0 för att få första loopen att funka
-        for (Map.Entry<String, Integer> dictionaryEntry : dictionary.entrySet()) {
-            String substring = dictionaryEntry.getKey(); //Hämtar sträng från hashmap
-            int number = dictionaryEntry.getValue(); //Hämtar antal förekomster
+        List<Map.Entry<String, Integer>> list = new ArrayList<>(dictionary.entrySet());
+        
+        // Sortera listan baserat på antalet förekomster där flest förekomster ligger först
+        Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+            @Override
+            public int compare(Map.Entry<String, Integer> a, Map.Entry<String, Integer> b) {
+                return b.getValue().compareTo(a.getValue());
+            }
+        });
 
-            //uppdaterar vilken substräng som är vanligast om den aktruella är vanligast 
-            if (number > TempMaxNumber) {
-                theSubsrtring = substring;
-                TempMaxNumber = number;
-            }
-            //Om den aktuella är lika förekomlig och ligger före alfabetiskt
-            if (number == TempMaxNumber && substring.compareTo(theSubsrtring) == -1){ //compareTo ger 1 om current är större än moast common, 0 om de är lika , -1 om current om mindre
-                theSubsrtring = substring;
-                TempMaxNumber = number;
-            }
-    }
-        return theSubsrtring;
+        // Returnerar första elementets delsträng i den sorterade listan
+        return list.get(0).getKey();
     }}
