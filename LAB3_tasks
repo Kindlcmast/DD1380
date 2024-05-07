@@ -1,0 +1,22 @@
+I den här uppgiften ska du läsa in två tal, A och B, i bas N, och beräkna deras produkt C och skriva ut den i bas M.
+
+Du ska beräkna värdet C = A*B, och skriva ut det, angivet i bas M.
+
+Exempel: Om vi antar att N = 8, M = 10, och A och B anges som 123 resp. 1, så har vi att A=83 i bas 10, och C alltså blir 83*1 = 83, vilket ska skrivas ut i bas 10, och svaret därmed blir 83.
+
+Värdet V på ett tal T i bas N definieras här som:
+
+
+Där k är antalet siffror i talet T, och ti är den i:e siffran i T, där man räknar från den minst signifikanta siffran, och börjar på 0.
+
+Som exempel, om T = 123, och N = 8, så gäller att k = 3, 
+ = 3, 
+ = 2 och 
+ = 3, samt att V = 83.
+
+Siffror i intervallet 0-9 anges med vanliga arabiska siffror, därefter används versaler ur det latinska alfabetet (A-Z), där A betyder 10, B betyder 11, osv upp till Z som representerar 35.
+
+Indata
+I indata anges först talen N resp. M på första raden, sedan följer talen A och B på varsin egen rad.
+
+Du kan anta att N och M är heltal, och minst 2 och högst 36, samt att både A och B är positiva heltal som är inte är större än Integer.MAX_VALUE.
