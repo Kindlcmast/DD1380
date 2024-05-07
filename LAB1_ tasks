@@ -1,0 +1,12 @@
+Den här uppgiften går ut på att hitta den längsta sorterade delsträngen i en längre sträng.
+
+Ditt program ska kunna läsa in en längre sträng S som indata, och ange längden L på den längsta delsträng som kommer i sorterad ordning.
+
+Exempel: antag S = "DCBABCBA" (här med den längsta sorterade delsträngen "ABC" markerad i fetstil för att förtydliga). Då är det korrekta värdet på L 3.
+
+Indata
+En icke radbryten sträng.
+
+Du kan anta att alla tecken i strängen är antingen siffrorna 0-9, versalerna A-Z, eller gemenerna a-z. Korrekt alfabetisk ordning för dessa är "0123456789ABCDEGHIJKLMNOPQRSTUVWXYZabcdefhijklmnopqrstuvwxyz".
+
+S kan vara 1 - 100 000 000 tecken lång, och termineras med radbryt eller EOF.
