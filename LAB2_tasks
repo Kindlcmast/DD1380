@@ -1,0 +1,16 @@
+Den här uppgiften går ut på att hitta den oftast förekommande delsträngen i en längre sträng.
+
+Ditt program ska kunna läsa in en längre sträng S som indata, och ange den delsträng d, av n teckens längd, som förekommer flest gånger. Om flera delsträngar av den angivna längden förekommer flest gånger, så ska ditt program ange den delsträng som kommer först alfabetiskt.
+
+Exempel: antag n = 3, och S = "ABCDABCDABADAB", med den vanligaste delsträngen d = "DAB" markerad i fetstil.
+
+Du kan anta att alla tecken i strängen är antingen siffrorna 0-9, versalerna A-Z, eller gemenerna a-z. Korrekt alfabetisk ordning för dessa är "0123456789ABCDEGHIJKLMNOPQRSTUVWXYZabcdefhijklmnopqrstuvwxyz".
+
+Indata
+Ett heltal n, på en egen rad, följt av en icke radbryten sträng S.
+
+n kan vara från 1 till längden av S.
+
+S kan vara 1 - 100 000 000 tecken lång, och termineras med radbryt eller EOF.
+
+Du kan anta att alla tecken i strängen är antingen siffrorna 0-9, versalerna A-Z, eller gemenerna a-z. Korrekt alfabetisk ordning för dessa är "0123456789ABCDEGHIJKLMNOPQRSTUVWXYZabcdefhijklmnopqrstuvwxyz".
