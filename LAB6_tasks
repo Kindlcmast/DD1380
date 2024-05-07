@@ -1,0 +1,21 @@
+I den här uppgiften ska du skriva ett program som kan läsa in en fil med data om olika grönsaker som har odlats i olika länder och skriva ut en sorterad lista med rekordstorleken för varje grönsakstyp.
+
+OBS! I den här labben måste du skapa en en extra klass som kan lagra poster med grönsaksdata, och som implementerar gränssnittet Comparable, så att du kan sortera arrayer med poster.
+
+Den internationella jordbruksföreningen sammanställer varje år en lista över var de största grönsakerna av olika typer har producerats.
+
+Listan är i första hand sorterad på grönsakstypen (alfabetiskt), och i andra hand på storlek (från störst till minst). Varje land får bara bidra med en grönsak av varje typ, så även om t.ex Sverige skulle producera de 17 största slanggurkorna ett visst år, så räknas bara den största, och nummer två på listan är den största grönsaken från de övriga länderna, och så vidare. Om två länder skulle tangera varandras rekord för en viss grönsak så ska de skrivas ut i alfabetisk ordning.
+
+Dock är anmälan till tävlingen decentraliserad, och varje odlare kan anmäla hur många grönsaker de vill, så indata kan bestå av flera olika exempel på samma grönsak från samma land. Det är ditt programs uppgift att se till att bara den största grönsaken av varje typ tas med för varje land.
+
+Indata
+Indata består av en fil där varje rad motsvarar en specifik grönsak, med information om var den odlats, och hur stor den var, enligt följande mönster:
+
+<Grönsakstyp (ett ord)> <Namn på landet (ett eller flera ord)> <Storlek (heltal)> <enhet (ett ord)>
+
+Du kan anta att alla grönsaker av samma typ mäts i samma enhet.
+
+Du kan anta att det är högst 1 000 000 rader i indatafilen
+
+Utdata
+En sorterad radbruten lista, med högst ett exemplar av varje grönsak från varje land. Varje rad följer samma mönster som ovan.
